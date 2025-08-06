@@ -1,6 +1,4 @@
 const playersUrl = 'https://battlelog.battlefield.com/bf3/servers/getPlayersOnServer/pc'
-
-//tracking current server calls to not overlap
 const serversBeingCalled = new Map()
 
 async function _getPlayers(id) {
@@ -20,8 +18,8 @@ async function _handleServerPlayers(req) {
     return { ...req, players }
 }
 
-chrome.runtime.onMessage.addListener((req, sender, sendRes) => { 
-
+// Firefox-compatible message listener
+browser.runtime.onMessage.addListener((req, sender, sendRes) => {
     _handleServerPlayers(req).then(res => {
         sendRes(res)
         serversBeingCalled.delete(req.guid)
