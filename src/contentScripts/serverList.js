@@ -52,10 +52,9 @@ function _setupNewPlayersAmount(guid) {
 
 function serverListMutationCallback() {
     const elements = _getServerRows()
-
     Array.from(elements).forEach((el) => {
         const guid = el.getAttribute('guid')
-        chrome.runtime.sendMessage({ guid }, serverListSendMessageCallback)
+        browser.runtime.sendMessage({ guid }).then(serverListSendMessageCallback)
     })
 }
 
@@ -125,7 +124,7 @@ function serverPageMutationCallback() {
         _handleInsertNewPlayers(serverMap[guid])
     }
 
-    chrome.runtime.sendMessage({ guid }, serverPageSendMessageCallback)
+    browser.runtime.sendMessage({ guid }).then(serverPageSendMessageCallback)
 }
 
 function serverPageSendMessageCallback(res) {
@@ -144,4 +143,4 @@ const observer = new MutationObserver(() => {
 })
 observer.observe(document, { childList: true, subtree: true })
 
-chrome.runtime.onMessage.addListener(serverListSendMessageCallback)
+browser.runtime.onMessage.addListener(serverListSendMessageCallback)
